@@ -53,10 +53,7 @@ jobs:
           echo "Running test type: $TEST_TYPE"
 
           if [ "$TEST_TYPE" = "ihm" ]; then
-            npx playwright test tests/ihm
-
-          elif [ "$TEST_TYPE" = "api" ]; then
-            npx playwright test tests/api
+            npx playwright test tests/
 
           elif [ "$TEST_TYPE" = "mobile" ]; then
             npx playwright test --project=mobile-chrome --project=mobile-safari
