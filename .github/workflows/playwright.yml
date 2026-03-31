@@ -3,8 +3,26 @@ name: Playwright CI
 on:
   push:
     branches: [main, master]
+
   pull_request:
     branches: [main, master]
+
+  schedule:
+    - cron: "0 11 * * *" # tous les jours à 12h (Maroc = UTC+1)
+
+  workflow_dispatch:
+    inputs:
+      test_type:
+        description: "Type de tests à exécuter"
+        required: true
+        default: "all"
+        type: choice
+        options:
+          - all
+          - ihm
+          - api
+          - mobile
+          - responsive
 
 jobs:
   test:
@@ -12,25 +30,48 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Checkout code
       - name: Checkout project
         uses: actions/checkout@v4
 
+      # 2. Setup Node
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
           cache: npm
 
+      # 3. Install deps
       - name: Install dependencies
         run: npm ci
 
+      # 4. Install browsers
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
+      # 5. Run tests (smart execution)
       - name: Run Playwright tests
-        run: npx playwright test
+        run: |
+          echo "Running test type: ${{ github.event.inputs.test_type }}"
 
-      - name: Upload HTML report
+          if [ "${{ github.event.inputs.test_type }}" = "ihm" ]; then
+            npx playwright test tests/ihm
+
+          elif [ "${{ github.event.inputs.test_type }}" = "api" ]; then
+            npx playwright test tests/api
+
+          elif [ "${{ github.event.inputs.test_type }}" = "mobile" ]; then
+            npx playwright test tests/mobile
+
+          elif [ "${{ github.event.inputs.test_type }}" = "responsive" ]; then
+            npx playwright test tests/responsive
+
+          else
+            npx playwright test
+          fi
+
+      # 6. Upload HTML report
+      - name: Upload Playwright report
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
@@ -38,6 +79,7 @@ jobs:
           path: playwright-report/
           retention-days: 30
 
+      # 7. Upload traces / videos / screenshots
       - name: Upload test results
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
