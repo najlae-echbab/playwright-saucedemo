@@ -1,0 +1,54 @@
+[
+  {
+    "username": "standard_user",
+    "password": "secret_sauce",
+    "loginExpected": "success",
+    "canShop": true,
+    "canCheckout": true,
+    "firstName": "Najlae",
+    "lastName": "Echbab",
+    "postalCode": "60000"
+  },
+  {
+    "username": "locked_out_user",
+    "password": "secret_sauce",
+    "loginExpected": "error",
+    "canShop": false,
+    "canCheckout": false,
+    "firstName": "Najlae",
+    "lastName": "Echbab",
+    "postalCode": "60000"
+  },
+  {
+  "username": "problem_user",
+  "password": "secret_sauce",
+  "loginExpected": "success",
+  "canCheckout": false
+},
+{
+  "username": "error_user",
+  "password": "secret_sauce",
+    "loginExpected": "success",
+  "canCheckout": false
+},
+{
+  "username": "performance_glitch_user",
+  "password": "secret_sauce",
+  "loginExpected": "success",
+  "canShop": true,
+  "canCheckout": true,
+  "firstName": "Najlae",
+  "lastName": "Echbab",
+  "postalCode": "60000"
+},
+  {
+    "username": "visual_user",
+    "password": "secret_sauce",
+    "loginExpected": "success",
+    "canShop": true,
+    "canCheckout": true,
+    "firstName": "Najlae",
+    "lastName": "Echbab",
+    "postalCode": "60000"
+  }
+]
